@@ -1,4 +1,4 @@
-const { getMovieList } = require("../services/MovieService");
+const { getMovieList, createNewMovie } = require("../services/MovieService");
 const apiResponse = require("../utils/apiResponse");
 
 
@@ -49,13 +49,7 @@ const updateMovie = async (req, res) => {
 
 const createMovie = async (req, res) => {
 	try {
-		var movieObj = new MovieModel({ title: 'The inside out', description: 'Good', isbn: '13333'});
-		console.log('here', movieObj);
-
-		movieObj.save(function (err) {
-			if (err) { return apiResponse.ErrorResponse(res, err); }
-			return apiResponse.successResponseWithData(res,"Movie add Success.", movieObj);
-		});
+		createNewMovie(req.body, res);
 	} catch (err) {
 		//throw error in json response with status 500. 
 		return apiResponse.ErrorResponse(res, err);
