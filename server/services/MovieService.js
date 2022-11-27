@@ -44,8 +44,11 @@ const updateMovieById = async (req, res) => {
 				return apiResponse.notFoundResponse(res, "Movie does not exist with this id");
 			}
 			
-			const { name } = req.body;
+			const { name, description, imdbId, genres } = req.body;
 			DBModel.name = name || DBModel.name;
+			DBModel.description = description || DBModel.description;
+			DBModel.imdbId = imdbId || DBModel.imdbId;
+			DBModel.genres = genres || DBModel.genres;
 
 			DBModel.save( (err) => {
 				if (err) { 
