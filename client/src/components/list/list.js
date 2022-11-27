@@ -22,9 +22,11 @@ function List() {
         "field": "images",
         "headerName": "Poster",
         "width": 200,
-        renderCell: (params) => <a href="#" className='poster'>
-          <img src={`${baseUrl}${params.row.imdbId}.jpg`} width="170" />
-        </a>,
+        renderCell: (params) => (
+        <a href="/#" className='poster'>
+          <img alt={`${params.row.name}`} src={`${baseUrl}${params.row.imdbId}.jpg`} width="170" />
+        </a>
+        ),
       },
       {
         "field": "name",

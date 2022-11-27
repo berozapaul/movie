@@ -14,8 +14,11 @@ export const findData = async (qry) => {
 };
 
 export const postData = async (formData) => {
-    // const data = qry ? { params: data } : {};
     const { res } = await axios.post(URL, formData);
-    
+    return res;
+};
+
+export const putData = async (formData) => {
+    const { res } = await axios.put(`${URL}${formData._id}`, formData);
     return res;
 };

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { TextField, IconButton } from '@mui/material';
+import { TextField } from '@mui/material';
 import { findData } from '../../utils/api';
 
 /*
@@ -17,22 +17,24 @@ const Search = (props) => {
             const data = await findData(qry);
             props.onSearch(data);
         }
-    }, []);
+    }, [props]);
 
     return (
         <>
             <TextField
                 id="search-bar"
                 className="text"
-                label="Enter a movie name"
+                label="Search movie"
                 variant="outlined"
                 placeholder="Search..."
                 onKeyUp={handleKeyUp}
                 size="small"
+                sx={{
+                    input: {
+                        color: "#fff",
+                    }
+                }}
             />
-            {/* <IconButton type="submit" aria-label="search">
-                <SearchIcon />
-            </IconButton> */}
         </>
     );
 };

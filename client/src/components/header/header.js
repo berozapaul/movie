@@ -17,7 +17,7 @@ const Header = (props) => {
 
     const handleSearchData = useCallback((searchData) => {
         props.onSearch(searchData);
-    }, []);
+    }, [props]);
 
     return (
         <AppBar position='static'>

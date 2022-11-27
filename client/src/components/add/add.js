@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Dialog, DialogContent, DialogTitle, Button, Checkbox, TextField, FormControlLabel, FormGroup, FormLabel, FormControl, Grid, DialogActions } from '@mui/material';
-import { postData } from '../../utils/api';
+import { postData, putData } from '../../utils/api';
+import { useForm } from "react-hook-form";
 
 
 /*
@@ -14,7 +15,9 @@ import { postData } from '../../utils/api';
 const Add = (props) => {
     const { id } = props;
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
+    const { state = {} } = useLocation();
+    console.log(state);
+    const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: state});
 
     const handleOpen = useCallback(() => {
         setOpen(true);
@@ -23,23 +26,15 @@ const Add = (props) => {
         setOpen(false);
     }, []);
 
-    const saveItem = useCallback(() => {
-        const movieTitle = document.getElementById('name').value || '';
-        const description = document.getElementById('description').value || '';
-        const imdbId = document.getElementById('imdbId').value || '';
-        if (!movieTitle)  {
-            return false;
-        }
-
-        const res = postData({name: movieTitle, description, imdbId });
-        navigate('/');
-    }, []);
-
+    const onFormSubmit = useCallback((formData) => {
+        (id) ? putData(formData) : postData(formData);
+        setOpen(false);
+    }, [id]);
 
     return (
         <>
             {id ?
-                <Button variant="contained" onClick={() => handleOpen()}>Edit</Button> :
+                <Button variant="contained" onClick={(id) => handleOpen()}>Edit</Button> :
                 <Button variant="contained" onClick={() => handleOpen()}>Add new</Button>
             }
             <Dialog
@@ -51,33 +46,36 @@ const Add = (props) => {
                 <DialogTitle component="h1">
                     {id ? 'Edit' : 'Add new'}
                 </DialogTitle>
-                <DialogContent dividers>
-                    <Grid container direction={"column"} spacing={4}>
-                        <Grid item>
-                            <TextField required id="name" label="Movie title" variant="outlined" fullWidth />
+                <form onSubmit={handleSubmit(onFormSubmit)}>
+                    <DialogContent dividers>
+                        <Grid container direction={"column"} spacing={4}>
+                            <Grid item>
+                                <TextField required id="name" label="Movie title" variant="outlined" fullWidth {...register('name', { required: 'Title can not be blank.' })} error={!!errors['name']} helperText={errors['name'] ? errors['name'].message : ''} />
+                            </Grid>
+                            <Grid item>
+                                <TextField id="description" label="Movie description" multiline
+                                    rows={3} variant="outlined" fullWidth {...register('description')} />
+                            </Grid>
+                            <Grid item>
+                                <TextField id="imdbId" label="IMDB ID" variant="outlined" fullWidth {...register('imdbId')} />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <TextField id="description" label="Movie description" variant="outlined" fullWidth />
-                        </Grid>
-                        <Grid item>
-                            <TextField id="imdbId" label="IMDB ID" variant="outlined" fullWidth />
-                        </Grid>
-                    </Grid>
 
 
-                    <FormControl component="fieldset" sx={{ m: 3 }} variant="standard">
-                        <FormLabel component="legend">Genere</FormLabel>
-                        <FormGroup>
-                            <FormControlLabel name="genre" control={<Checkbox />} label="Si Fi" />
-                            <FormControlLabel name="genre" control={<Checkbox />} label="Romantic" />
-                        </FormGroup>
-                    </FormControl>
-
-                </DialogContent>
-                <DialogActions>
-                    <Button sx={{ paddingLeft: 5, paddingRight: 5 }} variant="contained" onClick={() => saveItem()}>Save</Button>
-                    <Button variant="contained" onClick={() => handleClose()}>Close</Button>
-                </DialogActions>
+                        <FormControl component="fieldset" sx={{ m: 3 }} variant="standard">
+                            <FormLabel component="legend">Generes</FormLabel>
+                            <FormGroup>
+                                <FormControlLabel control={<Checkbox value="si-fi" {...register('genres')} />} label="Si Fi" />
+                                <FormControlLabel control={<Checkbox value="drama" {...register('genres')} />} label="Drama" />
+                                <FormControlLabel control={<Checkbox value="comedy" {...register('genres')} />} label="Comedy" />
+                            </FormGroup>
+                        </FormControl>
+                        <DialogActions>
+                            <Button type="submit" sx={{ paddingLeft: 5, paddingRight: 5 }} variant="contained">Save</Button>
+                            <Button variant="contained" onClick={() => handleClose()}>Close</Button>
+                        </DialogActions>
+                    </DialogContent>
+                </form>
             </Dialog>
         </>
     )
