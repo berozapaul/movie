@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Card, Typography, Button } from '@mui/material';
+import { Card, Typography, Button, Grid } from '@mui/material';
 
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
-import Collapse from '@mui/material/Collapse';
+import Add from '../add/add';
 const baseUrl = process.env.REACT_APP_POSTER_URL;
 
 
@@ -17,10 +17,17 @@ const baseUrl = process.env.REACT_APP_POSTER_URL;
 
 const Details = () => {
     const location = useLocation();
-    const { name, description, imdbId } = location.state;
+    const { _id, name, description, imdbId } = location.state;
     return (
         <>
-            <h1 className="inscApp">{name}</h1>
+            <Grid container spacing={0} alignItems="center">
+                <Grid item xs={6}>
+                    <h1 className="inscApp">{name}</h1>
+                </Grid>
+                <Grid item xs={6} display="flex" justifyContent="flex-end">
+                    <Add id={_id}/>
+                </Grid>
+            </Grid>
             <Card>
                 <CardMedia
                     component="img"

@@ -6,3 +6,22 @@ export const findData = async (qry) => {
 
     return data;
 };
+
+export const postData = async (formData) => {
+    // const data = qry ? { params: data } : {};
+    const { res } = await axios.post(URL, formData);
+    
+    return res;
+};
+
+
+// axios.post('/user', {
+//     firstName: 'Fred',
+//     lastName: 'Flintstone'
+//   })
+//   .then(function (response) {
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });

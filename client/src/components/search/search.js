@@ -31,9 +31,4 @@ const Search = (prop) => {
     // );
 };
 
-Search.propTypes = {
-    onSearch: PropTypes.func
-};
-
-// @ts-ignore
 export default Search;
