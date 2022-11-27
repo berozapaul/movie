@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {AppBar, Toolbar, Typography} from '@mui/material';
 
 
@@ -10,10 +10,13 @@ import {AppBar, Toolbar, Typography} from '@mui/material';
  */
 
 const Header = () =>{
+    const handleClick = useCallback(() => {
+        window.location.href = "/";
+    }, [])
     return(
         <AppBar position='static'>
             <Toolbar>
-                <Typography>Movie Mania</Typography>
+                <Typography className='movie-logo' onClick={handleClick}>Movie Mania</Typography>
             </Toolbar>
         </AppBar>
    )

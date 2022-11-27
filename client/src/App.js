@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Container } from '@mui/material';
 
 import AppContext from './context';
-import Search from "./components/search/search";
 import Loader from "./components/common/loader";
 
-import List from './components/list/list';
+
 import Header from "./components/header/header";
-import Route from "./route";
+import URLRoute from "./route";
 import { findData } from './utils/api';
 import './App.css';
 
@@ -31,11 +30,7 @@ function App() {
       {data.length > 0 ?
         <AppContext.Provider value={contextData}>
           <Header />
-          <h1 className="inscApp">IMDB Top Movies</h1>
-          <Search
-            onSearch={executeSearch}
-          />
-          <List />
+          <URLRoute />
         </AppContext.Provider>
         : <Loader />
       }

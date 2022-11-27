@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import './list.css';
 
 import AppContext from '../../context';
 const baseUrl = process.env.REACT_APP_POSTER_URL;
-console.log(baseUrl);
 
 function List() {
+  const navigate = useNavigate();
   const context = useContext(AppContext);
   const { movies } = context;
 
@@ -22,6 +23,7 @@ function List() {
   };
 
   const handleOnCellClick = (params) => {
+    navigate(`/${params.row._id}`, {state: params.row});
     console.log(params);
   };
 
