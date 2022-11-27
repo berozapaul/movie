@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Dialog, DialogContent } from '@mui/material';
+import { Stack } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import './list.css';
 
@@ -10,21 +10,10 @@ const baseUrl = process.env.REACT_APP_POSTER_URL;
 function List() {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  const { movies } = context;
-
-  const [open, setOpen] = useState(false);
-  const [activeGif, setActiveGif] = useState('');
-  const handleOpen = (clickedGif) => {
-    setOpen(true);
-    setActiveGif(clickedGif);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const { movies = [] } = context;
 
   const handleOnCellClick = (params) => {
-    navigate(`/${params.row._id}`, {state: params.row});
-    console.log(params);
+    navigate(`/${params.row._id}`, { state: params.row });
   };
 
   const data = {
@@ -33,7 +22,7 @@ function List() {
         "field": "images",
         "headerName": "Poster",
         "width": 200,
-        renderCell: (params) => <a href="#" className='poster' onClick={() => handleOpen(`${baseUrl}${params.row.imdbId}.jpg`)}>
+        renderCell: (params) => <a href="#" className='poster'>
           <img src={`${baseUrl}${params.row.imdbId}.jpg`} width="170" />
         </a>,
       },
@@ -60,19 +49,15 @@ function List() {
         getRowId={(row) => row._id}
         getRowClassName={() => 'movie-row'}
         onRowClick={handleOnCellClick}
+        components={{
+          NoRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              No items available.
+            </Stack>
+          )
+        }}
         {...data}
       />
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="md"
-        style={{ zIndex: 0 }}
-      >
-        <DialogContent dividers>
-          <img src={activeGif} />
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

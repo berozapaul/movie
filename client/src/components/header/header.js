@@ -1,5 +1,6 @@
-import React, {useCallback} from 'react';
-import {AppBar, Toolbar, Typography} from '@mui/material';
+import React, { useCallback } from 'react';
+import { AppBar, Toolbar, Typography, Grid, } from '@mui/material';
+import Search from '../search/search';
 
 
 /*
@@ -9,16 +10,28 @@ import {AppBar, Toolbar, Typography} from '@mui/material';
  * Author: dev@example.com
  */
 
-const Header = () =>{
+const Header = (props) => {
     const handleClick = useCallback(() => {
         window.location.href = "/";
-    }, [])
-    return(
+    }, []);
+
+    const handleSearchData = useCallback((searchData) => {
+        props.onSearch(searchData);
+    }, []);
+
+    return (
         <AppBar position='static'>
             <Toolbar>
-                <Typography className='movie-logo' onClick={handleClick}>Movie Mania</Typography>
+                <Grid container spacing={0} alignItems="center">
+                    <Grid item xs={6}>
+                        <Typography className='movie-logo' onClick={handleClick}>Movie Mania</Typography>
+                    </Grid>
+                    <Grid item xs={6} display="flex" justifyContent="flex-end">
+                        <Search onSearch={handleSearchData}/>
+                    </Grid>
+                </Grid>
             </Toolbar>
         </AppBar>
-   )
+    )
 };
 export default Header;

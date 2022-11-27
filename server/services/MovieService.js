@@ -5,7 +5,9 @@ const apiResponse = require("../utils/apiResponse");
 
 const getMovieList = async (req, res) => {
 	try {
-		const movies = await MovieModel.find({}).sort({'createdAt': -1}).limit(10);
+		const { q: qry } = req.query;
+		const params = qry ? {'name' : new RegExp(qry, 'i')} : {};
+		const movies = await MovieModel.find(params).sort({'createdAt': -1}).limit(10);
 		return apiResponse.successResponseWithData(res, "Operation success", movies);
 	} catch (err) {
 		throw new Error(e.message)

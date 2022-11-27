@@ -1,34 +1,40 @@
-import PropTypes from "prop-types";
-import React from 'react';
-import { search } from "../../utils/api";
-import { doSearch } from "../../utils/site";
+import React, { useCallback } from 'react';
+import { TextField, IconButton } from '@mui/material';
+import { findData } from '../../utils/api';
 
 /*
- * Purpose: The purpose of this component is to do the giphy search.
+ * Purpose: The purpose of this component is to do the search.
  *
  * Version: 1.0
  * Author: dev@example.com
  */
 
 
-const Search = (prop) => {
+const Search = (props) => {
+    const handleKeyUp = useCallback(async (event) => {
+        if (event.keyCode === 13) {
+            const qry = (event.target).value.trim();
+            const data = await findData(qry);
+            props.onSearch(data);
+        }
+    }, []);
 
-    // const handleKeyUp = async (event) => {
-    //     if (event.keyCode === 13) {
-    //         const searchStr = (event.target).value;
-    //         const data = await doSearch(searchStr, searchGifs);
-    //         prop.onSearch(data);
-    //     }
-    // };
-
-    // return (
-    //     <div className="search">
-    //         <input type="text"
-    //             onKeyUp={handleKeyUp}
-    //             placeholder="Search GIF"
-    //         />
-    //     </div>
-    // );
+    return (
+        <>
+            <TextField
+                id="search-bar"
+                className="text"
+                label="Enter a movie name"
+                variant="outlined"
+                placeholder="Search..."
+                onKeyUp={handleKeyUp}
+                size="small"
+            />
+            {/* <IconButton type="submit" aria-label="search">
+                <SearchIcon />
+            </IconButton> */}
+        </>
+    );
 };
 
 export default Search;
